@@ -9,19 +9,23 @@ export const Code: Block = {
       type: 'select',
       defaultValue: 'typescript',
       options: [
-        {
-          label: 'Typescript',
-          value: 'typescript',
-        },
-        {
-          label: 'Javascript',
-          value: 'javascript',
-        },
-        {
-          label: 'CSS',
-          value: 'css',
-        },
+        { label: 'TypeScript', value: 'typescript' },
+        { label: 'JavaScript', value: 'javascript' },
+        { label: 'TSX', value: 'tsx' },
+        { label: 'JSX', value: 'jsx' },
+        { label: 'Bash', value: 'bash' },
+        { label: 'JSON', value: 'json' },
+        { label: 'CSS', value: 'css' },
+        { label: 'HTML', value: 'html' },
+        { label: 'Markdown', value: 'markdown' },
       ],
+    },
+    {
+      name: 'title',
+      type: 'text',
+      admin: {
+        placeholder: 'e.g. payload.config.ts',
+      },
     },
     {
       name: 'code',
