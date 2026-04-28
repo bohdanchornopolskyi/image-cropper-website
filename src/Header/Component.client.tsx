@@ -1,41 +1,36 @@
 'use client'
-import { useHeaderTheme } from '@/providers/HeaderTheme'
+
+import { Github } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
-import type { Header } from '@/payload-types'
-
-import { Logo } from '@/components/Logo/Logo'
-import { HeaderNav } from './Nav'
-
-interface HeaderClientProps {
-  data: Header
-}
-
-export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
-  /* Storing the value in a useState to avoid hydration errors */
-  const [theme, setTheme] = useState<string | null>(null)
-  const { headerTheme, setHeaderTheme } = useHeaderTheme()
+export const HeaderClient: React.FC = () => {
   const pathname = usePathname()
 
-  useEffect(() => {
-    setHeaderTheme(null)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname])
-
-  useEffect(() => {
-    if (headerTheme && headerTheme !== theme) setTheme(headerTheme)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [headerTheme])
-
   return (
-    <header className="container relative z-20   " {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="py-8 flex justify-between">
-        <Link href="/">
-          <Logo loading="eager" priority="high" className="invert dark:invert-0" />
+    <header className="fixed top-0 w-full z-50 border-b border-zinc-800/50 bg-[#0A0A0A]/80 backdrop-blur-sm">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 h-14 flex items-center justify-between">
+        <Link href="/" className="text-sm font-semibold text-white tracking-tight">
+          Payload Image Cropper
         </Link>
-        <HeaderNav data={data} />
+        <nav className="flex items-center gap-6">
+          <Link
+            href="/docs"
+            className={`text-sm transition-colors ${pathname?.startsWith('/docs') ? 'text-white' : 'text-zinc-400 hover:text-white'}`}
+          >
+            Docs
+          </Link>
+          <a
+            href="https://github.com/bohdanchornopolskyi/image-cropper-plugin"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-zinc-400 hover:text-white transition-colors"
+            aria-label="GitHub"
+          >
+            <Github className="w-4 h-4" />
+          </a>
+        </nav>
       </div>
     </header>
   )
