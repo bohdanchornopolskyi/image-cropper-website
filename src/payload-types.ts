@@ -72,6 +72,8 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    'doc-categories': DocCategory;
+    docs: Doc;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -94,6 +96,8 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    'doc-categories': DocCategoriesSelect<false> | DocCategoriesSelect<true>;
+    docs: DocsSelect<false> | DocsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -783,6 +787,112 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "doc-categories".
+ */
+export interface DocCategory {
+  id: string;
+  title: string;
+  /**
+   * URL-safe identifier. Auto-generated from title.
+   */
+  slug: string;
+  description?: string | null;
+  /**
+   * Sort order in sidebar (lower = first)
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "docs".
+ */
+export interface Doc {
+  id: string;
+  title: string;
+  /**
+   * URL path: /docs/{slug}. Auto-generated from title on create.
+   */
+  slug: string;
+  description?: string | null;
+  category: string | DocCategory;
+  /**
+   * Sort order within category (lower = first)
+   */
+  order?: number | null;
+  content?: (DocRichTextBlock | CodeBlock | CalloutBlock | StepsBlock)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DocRichTextBlock".
+ */
+export interface DocRichTextBlock {
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'richText';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CodeBlock".
+ */
+export interface CodeBlock {
+  language?: ('typescript' | 'javascript' | 'tsx' | 'jsx' | 'bash' | 'json' | 'css' | 'html' | 'markdown') | null;
+  title?: string | null;
+  code: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'code';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CalloutBlock".
+ */
+export interface CalloutBlock {
+  type: 'note' | 'tip' | 'warning' | 'danger';
+  title?: string | null;
+  content: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'callout';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StepsBlock".
+ */
+export interface StepsBlock {
+  steps?:
+    | {
+        title: string;
+        description?: string | null;
+        code?: string | null;
+        language?: ('typescript' | 'javascript' | 'bash' | 'json') | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'steps';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -990,6 +1100,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'doc-categories';
+        value: string | DocCategory;
+      } | null)
+    | ({
+        relationTo: 'docs';
+        value: string | Doc;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1355,6 +1473,87 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "doc-categories_select".
+ */
+export interface DocCategoriesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  description?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "docs_select".
+ */
+export interface DocsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  description?: T;
+  category?: T;
+  order?: T;
+  content?:
+    | T
+    | {
+        richText?: T | DocRichTextBlockSelect<T>;
+        code?: T | CodeBlockSelect<T>;
+        callout?: T | CalloutBlockSelect<T>;
+        steps?: T | StepsBlockSelect<T>;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DocRichTextBlock_select".
+ */
+export interface DocRichTextBlockSelect<T extends boolean = true> {
+  content?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CodeBlock_select".
+ */
+export interface CodeBlockSelect<T extends boolean = true> {
+  language?: T;
+  title?: T;
+  code?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CalloutBlock_select".
+ */
+export interface CalloutBlockSelect<T extends boolean = true> {
+  type?: T;
+  title?: T;
+  content?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StepsBlock_select".
+ */
+export interface StepsBlockSelect<T extends boolean = true> {
+  steps?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        code?: T;
+        language?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1791,17 +1990,6 @@ export interface BannerBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'banner';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CodeBlock".
- */
-export interface CodeBlock {
-  language?: ('typescript' | 'javascript' | 'css') | null;
-  code: string;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'code';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
