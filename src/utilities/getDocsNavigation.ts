@@ -62,3 +62,26 @@ export async function getFirstDocSlug(): Promise<string | null> {
   const categories = await getDocsNavigation()
   return categories[0]?.docs[0]?.slug ?? null
 }
+
+export type DocsNavPage = {
+  title: string
+  slug: string
+}
+
+export async function getDocAdjacentPages(currentSlug: string): Promise<{
+  prev: DocsNavPage | null
+  next: DocsNavPage | null
+}> {
+  const categories = await getDocsNavigation()
+  const pages = categories.flatMap((category) => category.docs)
+  const index = pages.findIndex((doc) => doc.slug === currentSlug)
+
+  if (index === -1) {
+    return { prev: null, next: null }
+  }
+
+  return {
+    prev: index > 0 ? pages[index - 1] : null,
+    next: index < pages.length - 1 ? pages[index + 1] : null,
+  }
+}

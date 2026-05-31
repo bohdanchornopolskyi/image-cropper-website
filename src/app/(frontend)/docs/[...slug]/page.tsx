@@ -8,6 +8,8 @@ import { CalloutBlock } from '@/blocks/Callout/Component'
 import { StepsBlock } from '@/blocks/Steps/Component'
 import { CodeBlock } from '@/blocks/Code/Component'
 import { DocRichTextBlock } from '@/blocks/DocRichText/Component'
+import { DocsPageNav } from '@/components/DocsPageNav'
+import { getDocAdjacentPages } from '@/utilities/getDocsNavigation'
 
 type Args = {
   params: Promise<{ slug: string[] }>
@@ -64,6 +66,7 @@ export default async function DocPage({ params }: Args) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const blocks: any[] = doc.content ?? []
+  const { prev, next } = await getDocAdjacentPages(slugPath)
 
   return (
     <article>
@@ -100,6 +103,8 @@ export default async function DocPage({ params }: Args) {
           }
         })}
       </div>
+
+      <DocsPageNav prev={prev} next={next} />
     </article>
   )
 }
