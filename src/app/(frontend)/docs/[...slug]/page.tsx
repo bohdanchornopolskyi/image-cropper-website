@@ -10,15 +10,17 @@ import { CodeBlock } from '@/blocks/Code/Component'
 import { DocRichTextBlock } from '@/blocks/DocRichText/Component'
 
 type Args = {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string[] }>
 }
 
+const toSlugPath = (slug: string[]) => slug.join('/')
+
 export async function generateMetadata({ params }: Args): Promise<Metadata> {
-  const { slug } = await params
+  const slugPath = toSlugPath((await params).slug)
   const payload = await getPayload({ config: configPromise })
   const { docs } = await payload.find({
     collection: 'docs',
-    where: { slug: { equals: slug } },
+    where: { slug: { equals: slugPath } },
     limit: 1,
     select: { title: true, description: true },
   })
@@ -38,15 +40,15 @@ export async function generateStaticParams() {
     limit: 1000,
     overrideAccess: false,
   })
-  return docs.map((doc) => ({ slug: doc.slug }))
+  return docs.map((doc) => ({ slug: doc.slug.split('/') }))
 }
 
 export default async function DocPage({ params }: Args) {
-  const { slug } = await params
+  const slugPath = toSlugPath((await params).slug)
   const payload = await getPayload({ config: configPromise })
   const { docs } = await payload.find({
     collection: 'docs',
-    where: { slug: { equals: slug } },
+    where: { slug: { equals: slugPath } },
     limit: 1,
     depth: 1,
     overrideAccess: false,

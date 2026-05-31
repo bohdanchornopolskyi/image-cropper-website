@@ -10,7 +10,26 @@ interface TerminalProps {
   title?: string
 }
 
-export function Terminal({ code, language = 'bash', title = 'Terminal' }: TerminalProps) {
+const terminalTitles: Record<string, string> = {
+  bash: 'Terminal',
+  shell: 'Terminal',
+  sh: 'Terminal',
+  typescript: 'typescript',
+  ts: 'typescript',
+  javascript: 'javascript',
+  js: 'javascript',
+  json: 'json',
+  tsx: 'tsx',
+  jsx: 'jsx',
+}
+
+function getTerminalTitle(language: string, title?: string): string {
+  if (title) return title
+  return terminalTitles[language.toLowerCase()] ?? language
+}
+
+export function Terminal({ code, language = 'bash', title }: TerminalProps) {
+  const displayTitle = getTerminalTitle(language, title)
   const [copied, setCopied] = useState(false)
 
   const handleCopy = async () => {
@@ -33,7 +52,7 @@ export function Terminal({ code, language = 'bash', title = 'Terminal' }: Termin
           <div className="w-3 h-3 rounded-full bg-zinc-700" />
         </div>
         <div className="flex-1 text-center text-xs font-mono text-zinc-500 font-medium tracking-wider">
-          {title}
+          {displayTitle}
         </div>
         <button
           onClick={handleCopy}
