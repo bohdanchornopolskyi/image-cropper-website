@@ -12,22 +12,22 @@ const DOCS_CATEGORIES = [
   {
     title: 'Getting Started',
     description: 'Install and set up the plugin in your Payload project.',
-    href: '/docs/getting-started',
+    href: '/docs/installation',
   },
   {
     title: 'Configuration',
     description: 'Explore plugin options and field-level settings for custom aspect ratios.',
-    href: '/docs/configuration',
+    href: '/docs/setup/create-crop-image',
   },
   {
     title: 'Frontend Integration',
     description: 'See the data shape and learn how to display cropped images in your app.',
-    href: '/docs/frontend-integration',
+    href: '/docs/usage/single-size-crops',
   },
   {
     title: 'API Reference',
     description: 'Detailed breakdown of the CropDefinition interfaces and metadata structure.',
-    href: '/docs/api-reference',
+    href: '/docs/data-shape',
   },
 ]
 
